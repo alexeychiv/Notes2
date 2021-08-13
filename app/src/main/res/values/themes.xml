@@ -17,5 +17,6 @@
 	<style name="Theme.Notes2.NoActionBar">
 		<item name="windowNoTitle">true</item>
 		<item name="windowActionBar">false</item>
+		<item name="android:spotShadowAlpha">1</item>
 	</style>
 </resources>
