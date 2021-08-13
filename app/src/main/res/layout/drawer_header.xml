@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/header_bg"
+	android:paddingStart="@dimen/header_padding_start"
+	android:paddingTop="@dimen/header_padding_top"
+	android:paddingBottom="@dimen/header_padding_bottom">
+	
+	<androidx.appcompat.widget.AppCompatImageView
+		android:id="@+id/avatar"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="@+id/firstName"
+		app:srcCompat="@drawable/ic_account_circle" />
+	
+	<androidx.appcompat.widget.AppCompatTextView
+		android:id="@+id/firstName"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:text="@string/vasily"
+		android:textSize="@dimen/headerName_textSize"
+		android:textStyle="bold"
+		app:layout_constraintBottom_toTopOf="@+id/midName"
+		app:layout_constraintStart_toEndOf="@+id/avatar" />
+	
+	<androidx.appcompat.widget.AppCompatTextView
+		android:id="@+id/midName"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/fedorovich"
+		android:textStyle="bold"
+		app:layout_constraintBottom_toTopOf="@+id/lastName"
+		app:layout_constraintStart_toStartOf="@+id/firstName" />
+	
+	<androidx.appcompat.widget.AppCompatTextView
+		android:id="@+id/lastName"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="8dp"
+		android:text="@string/pupkin"
+		android:textSize="@dimen/headerName_textSize"
+		android:textStyle="bold"
+		app:layout_constraintBottom_toTopOf="@+id/status"
+		app:layout_constraintStart_toStartOf="@+id/firstName" />
+	
+	<TextView
+		android:id="@+id/status"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/status"
+		android:textSize="@dimen/headerName_textSize"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="@+id/avatar" />
+	
+	<TextView
+		android:id="@+id/status_text"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:text="@string/drawerHeader_statusText"
+		android:textSize="@dimen/header_statusTextSize"
+		android:textStyle="italic"
+		app:layout_constraintBottom_toBottomOf="@+id/status"
+		app:layout_constraintStart_toEndOf="@+id/status"
+		app:layout_constraintTop_toTopOf="@+id/status" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

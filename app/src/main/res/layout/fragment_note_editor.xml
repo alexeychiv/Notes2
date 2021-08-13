@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+	
+	
+	<androidx.appcompat.widget.AppCompatEditText
+		android:id="@+id/et_title_note"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:hint="@string/title_note_hint"
+		android:singleLine="true"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+	
+	<androidx.appcompat.widget.AppCompatTextView
+		android:id="@+id/tv_date_note"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/et_title_note"
+		tools:text="2002-jun-23 13:56" />
+	
+	
+	<androidx.appcompat.widget.AppCompatImageButton
+		android:id="@+id/btn_delete_note"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:layout_constraintStart_toEndOf="@+id/btn_save_note"
+		app:layout_constraintTop_toTopOf="@+id/btn_save_note"
+		app:srcCompat="@drawable/ic_delete" />
+	
+	<androidx.appcompat.widget.AppCompatImageButton
+		android:id="@+id/btn_save_note"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="@dimen/margin_top_element"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/tv_date_note"
+		app:srcCompat="@drawable/ic_save" />
+	
+	<androidx.appcompat.widget.AppCompatImageButton
+		android:id="@+id/btn_close_note"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:layout_constraintStart_toEndOf="@+id/btn_delete_note"
+		app:layout_constraintTop_toTopOf="@+id/btn_save_note"
+		app:srcCompat="@drawable/ic_close" />
+	
+	
+	<View
+		android:id="@+id/divider2"
+		android:layout_width="0dp"
+		android:layout_height="@dimen/hDivider_size_note"
+		android:background="?android:attr/listDivider"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/btn_save_note" />
+	
+	
+	<androidx.appcompat.widget.AppCompatEditText
+		android:id="@+id/etml_text_note"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		android:gravity="start|top"
+		android:inputType="textMultiLine"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

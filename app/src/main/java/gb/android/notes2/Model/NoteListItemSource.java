@@ -1,0 +1,23 @@
+package gb.android.notes2.Model;
+
+public interface NoteListItemSource {
+    void updateData();
+
+    int size();
+
+    NoteListItem getNoteListItemByPos(int position);
+
+    NoteListItem getNoteListItemById(int id);
+
+    void setSort(int sortType);
+
+    void addNote();
+
+    void deleteNote(int position);
+
+    String getNoteTextById(int id);
+
+    void updateNoteItemById(int id, String title, String date);
+
+    void updateNoteTextById(int id, String text);
+}

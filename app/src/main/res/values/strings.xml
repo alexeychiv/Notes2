@@ -1,0 +1,15 @@
+<resources>
+	<string name="app_name">Notes</string>
+	<string name="button_text_new">New</string>
+	<string name="title_note_hint">Title</string>
+	<string name="vasily">Vasily</string>
+	<string name="fedorovich">Fedorovich</string>
+	<string name="pupkin">Pupkin</string>
+	<string name="mainMenuItem_doNotSort">Do not sort</string>
+	<string name="mainMenuItem_sortAZ">Sort A-Z</string>
+	<string name="mainMenuItem_sortZA">Sort Z-A</string>
+	<string name="popupMenuItem_addRandom">Insert random number</string>
+	<string name="popupMenuItem_clear">Clear</string>
+	<string name="status">Статус:</string>
+	<string name="drawerHeader_statusText">Все сложно...</string>
+</resources>
