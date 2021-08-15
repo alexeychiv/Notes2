@@ -1,4 +1,4 @@
-package gb.android.notes2;
+package gb.android.notes2.view;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -16,8 +16,10 @@ import androidx.fragment.app.Fragment;
 
 import java.util.Calendar;
 
-import gb.android.notes2.Model.NoteListItem;
-import gb.android.notes2.Utils.NoteDate;
+import gb.android.notes2.App;
+import gb.android.notes2.R;
+import gb.android.notes2.model.NoteListItem;
+import gb.android.notes2.utils.NoteDate;
 
 public class NoteEditorFragment extends Fragment implements View.OnClickListener {
 
@@ -172,14 +174,17 @@ public class NoteEditorFragment extends Fragment implements View.OnClickListener
     private void deleteNote() {
         App.getNoteListItemSource().deleteNote(id);
         App.getNoteListItemSource().updateData();
-        App.getNoteListAdapter().notifyDataSetChanged();
+
+        if (App.getNoteListAdapter() != null)
+            App.getNoteListAdapter().notifyDataSetChanged();
     }
 
     private void saveNote() {
         App.getNoteListItemSource().updateNoteItemById(id, et_title_note.getText().toString(), tv_date_note.getText().toString());
         App.getNoteListItemSource().updateNoteTextById(id, etml_text_note.getText().toString());
         App.getNoteListItemSource().updateData();
-        App.getNoteListAdapter().notifyDataSetChanged();
+        if (App.getNoteListAdapter() != null)
+            App.getNoteListAdapter().notifyDataSetChanged();
     }
 
     private void popupMenu(View v) {

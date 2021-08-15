@@ -1,11 +1,11 @@
-package gb.android.notes2.Model;
+package gb.android.notes2.model;
 
 import android.content.Context;
 
 import java.util.List;
 
 import gb.android.notes2.App;
-import gb.android.notes2.SQLite.DataBase;
+import gb.android.notes2.sqlite.DataBase;
 
 public class NoteListItemSourceImpl implements NoteListItemSource {
 

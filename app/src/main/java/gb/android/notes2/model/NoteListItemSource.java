@@ -1,4 +1,4 @@
-package gb.android.notes2.Model;
+package gb.android.notes2.model;
 
 public interface NoteListItemSource {
     void updateData();

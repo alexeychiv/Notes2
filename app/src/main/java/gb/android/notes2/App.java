@@ -3,9 +3,9 @@ package gb.android.notes2;
 import android.app.Application;
 import android.preference.PreferenceManager;
 
-import gb.android.notes2.Model.NoteListItemSource;
-import gb.android.notes2.Model.NoteListItemSourceImpl;
-import gb.android.notes2.NoteList.NoteListAdapter;
+import gb.android.notes2.model.NoteListItemSource;
+import gb.android.notes2.model.NoteListItemSourceImpl;
+import gb.android.notes2.view.notelist.NoteListAdapter;
 
 public class App extends Application {
 

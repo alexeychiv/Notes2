@@ -1,4 +1,4 @@
-package gb.android.notes2;
+package gb.android.notes2.view;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import gb.android.notes2.NoteList.NoteListAdapter;
+import gb.android.notes2.App;
+import gb.android.notes2.R;
+import gb.android.notes2.view.notelist.NoteListAdapter;
 
 public class NoteListFragment extends Fragment implements View.OnClickListener {
 
@@ -48,6 +50,8 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
 
         noteListAdapter = new NoteListAdapter();
         rv_notesList.setAdapter(noteListAdapter);
+
+        App.setNoteListAdapter(noteListAdapter);
 
         btn_new.setOnClickListener(this);
     }
@@ -85,6 +89,11 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        App.setNoteListAdapter(null);
+    }
 
     @Override
     public void onClick(View v) {

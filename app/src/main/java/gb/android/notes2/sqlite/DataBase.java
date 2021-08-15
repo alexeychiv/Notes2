@@ -1,4 +1,4 @@
-package gb.android.notes2.SQLite;
+package gb.android.notes2.sqlite;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -10,8 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import gb.android.notes2.Model.NoteListItem;
-import gb.android.notes2.Utils.NoteDate;
+import gb.android.notes2.model.NoteListItem;
+import gb.android.notes2.utils.NoteDate;
 
 public class DataBase extends SQLiteOpenHelper {
 

@@ -1,4 +1,4 @@
-package gb.android.notes2.Utils;
+package gb.android.notes2.utils;
 
 import java.util.Calendar;
 

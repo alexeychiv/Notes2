@@ -14,6 +14,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
+import gb.android.notes2.view.NoteListFragment;
+
 public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar;

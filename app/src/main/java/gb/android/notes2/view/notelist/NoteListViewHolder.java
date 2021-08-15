@@ -1,4 +1,4 @@
-package gb.android.notes2.NoteList;
+package gb.android.notes2.view.notelist;
 
 import android.content.res.Configuration;
 import android.view.View;
@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import gb.android.notes2.App;
-import gb.android.notes2.NoteEditorFragment;
+import gb.android.notes2.view.NoteEditorFragment;
 import gb.android.notes2.R;
 
 public class NoteListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
