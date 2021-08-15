@@ -5,12 +5,12 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:layout_marginTop="5dp"
 	android:layout_marginStart="5dp"
+	android:layout_marginTop="5dp"
 	android:layout_marginEnd="5dp"
+	android:orientation="vertical"
 	app:cardCornerRadius="5dp"
-	app:cardElevation="5dp"
-	android:orientation="vertical">
+	app:cardElevation="5dp">
 	
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:id="@+id/rv_noteListItem"
@@ -47,7 +47,7 @@
 			app:layout_constraintStart_toStartOf="@+id/tv_title_line"
 			app:layout_constraintTop_toBottomOf="@+id/tv_title_line"
 			tools:text="2020-jan-01 06:34" />
-		
+	
 	
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

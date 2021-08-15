@@ -12,4 +12,5 @@
 	<string name="popupMenuItem_clear">Clear</string>
 	<string name="status">Статус:</string>
 	<string name="drawerHeader_statusText">Все сложно...</string>
+	<string name="delete_all">Delete All</string>
 </resources>

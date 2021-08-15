@@ -3,13 +3,23 @@ package gb.android.notes2.view.notelist;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import gb.android.notes2.App;
-import gb.android.notes2.model.NoteListItem;
 import gb.android.notes2.R;
+import gb.android.notes2.model.NoteListItem;
 
 public class NoteListAdapter extends RecyclerView.Adapter<NoteListViewHolder> {
+
+    Fragment parentFragment;
+
+    //================================================================================================
+    // CONSTRUCTOR
+
+    public NoteListAdapter(Fragment parentFragment) {
+        this.parentFragment = parentFragment;
+    }
 
     //================================================================================================
     // RecyclerView.Adapter Methods
@@ -32,6 +42,8 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListViewHolder> {
 
         holder.parentLayout.setOnClickListener(holder);
         holder.btn_delete_note.setOnClickListener(holder);
+
+        parentFragment.registerForContextMenu(holder.parentLayout);
     }
 
     @Override

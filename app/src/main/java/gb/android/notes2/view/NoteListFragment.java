@@ -2,7 +2,9 @@ package gb.android.notes2.view;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -48,7 +50,7 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
         layoutManager = new LinearLayoutManager(getContext());
         rv_notesList.setLayoutManager(layoutManager);
 
-        noteListAdapter = new NoteListAdapter();
+        noteListAdapter = new NoteListAdapter(this);
         rv_notesList.setAdapter(noteListAdapter);
 
         App.setNoteListAdapter(noteListAdapter);
@@ -71,8 +73,7 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
 
         init(getView());
 
-        if (App.getInstance().getIntPref("id") > -1)
-        {
+        if (App.getInstance().getIntPref("id") > -1) {
             if (App.getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT) {
                 getParentFragmentManager()
                         .beginTransaction()
@@ -105,4 +106,37 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
+
+    //================================================================================================
+    // CONTEXT MENU
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        requireActivity().getMenuInflater().inflate(R.menu.menu_note_list_context, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_note_list_deleteAll:
+                deleteAll();
+                break;
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    //================================================================================================
+    // CONTEXT MENU Methods
+
+    private void deleteAll() {
+        App.getInstance().setIntPref("id", -1);
+        getParentFragmentManager().popBackStack();
+        App.getNoteListItemSource().deleteAll();
+        noteListAdapter.notifyDataSetChanged();
+    }
+
+
 }

@@ -150,6 +150,38 @@ public class DataBase extends SQLiteOpenHelper {
         return false;
     }
 
+    @SuppressLint("DefaultLocale")
+    public boolean deleteAll() {
+        @SuppressLint("DefaultLocale") String query = String.format(
+                "DELETE FROM %s WHERE EXISTS (SELECT * FROM %s)",
+                TABLE_NOTE_LINES,
+                TABLE_NOTE_LINES);
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (!cursor.moveToFirst())
+            return false;
+
+        query = String.format(
+                "DELETE FROM %s WHERE EXISTS (SELECT * FROM %s)",
+                TABLE_NOTE_TEXTS,
+                TABLE_NOTE_TEXTS);
+
+        cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            cursor.close();
+            db.close();
+            return true;
+        }
+
+        cursor.close();
+        db.close();
+        return false;
+    }
+
     public List<NoteListItem> getNotesList() {
         List<NoteListItem> returnList = new ArrayList<>();
 

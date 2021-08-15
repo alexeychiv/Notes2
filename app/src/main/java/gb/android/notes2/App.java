@@ -39,16 +39,14 @@ public class App extends Application {
         return instance.noteListAdapter;
     }
 
-    static public int getScreenOrientation()
-    {
+    static public int getScreenOrientation() {
         return instance.getResources().getConfiguration().orientation;
     }
 
     //===============================================================================================
     // STATIC SETTERS
 
-    static public void setMainActivity(MainActivity mainActivity)
-    {
+    static public void setMainActivity(MainActivity mainActivity) {
         instance.mainActivity = mainActivity;
     }
 

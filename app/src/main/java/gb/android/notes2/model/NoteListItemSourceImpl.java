@@ -82,6 +82,12 @@ public class NoteListItemSourceImpl implements NoteListItemSource {
     }
 
     @Override
+    public void deleteAll() {
+        db.deleteAll();
+        listNotes.clear();
+    }
+
+    @Override
     public String getNoteTextById(int id) {
         return db.getNoteText(id);
     }

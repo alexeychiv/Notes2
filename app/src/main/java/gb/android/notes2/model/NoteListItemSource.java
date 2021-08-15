@@ -15,6 +15,8 @@ public interface NoteListItemSource {
 
     void deleteNote(int position);
 
+    void deleteAll();
+
     String getNoteTextById(int id);
 
     void updateNoteItemById(int id, String title, String date);

@@ -7,6 +7,8 @@
         <entry key="..\:/_ANDROID/Notes2/app/src/main/res/layout/fragment_noteList.xml" value="0.5380208333333333" />
         <entry key="..\:/_ANDROID/Notes2/app/src/main/res/layout/fragment_note_list.xml" value="0.3234375" />
         <entry key="..\:/_ANDROID/Notes2/app/src/main/res/layout/note_list_item.xml" value="0.5380208333333333" />
+        <entry key="..\:/_ANDROID/Notes2/app/src/main/res/menu/menu_main.xml" value="0.3234375" />
+        <entry key="..\:/_ANDROID/Notes2/app/src/main/res/menu/menu_note_list_context.xml" value="0.3234375" />
       </map>
     </option>
   </component>
