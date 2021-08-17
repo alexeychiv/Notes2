@@ -2,7 +2,6 @@ package gb.android.notes2.view;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -111,15 +110,11 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
     // CONTEXT MENU
 
     @Override
-    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-
-        requireActivity().getMenuInflater().inflate(R.menu.menu_note_list_context, menu);
-    }
-
-    @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_note_list_delete:
+                deleteNote();
+                break;
             case R.id.menu_note_list_deleteAll:
                 deleteAll();
                 break;
@@ -138,5 +133,20 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
         noteListAdapter.notifyDataSetChanged();
     }
 
+    private void deleteNote() {
+        int id = App.getNoteListItemSource().getNoteListItemByPos(App.getNoteListAdapter().getPosition()).getId();
+
+        if (App.getInstance().getIntPref("id") == id) {
+            App.getInstance().setIntPref("id", -1);
+
+            if (App.getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
+                App.getMainActivity().getSupportFragmentManager().popBackStack();
+            }
+        }
+
+        App.getNoteListItemSource().deleteNote(id);
+        App.getNoteListItemSource().updateData();
+        App.getNoteListAdapter().notifyDataSetChanged();
+    }
 
 }

@@ -22,6 +22,19 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListViewHolder> {
     }
 
     //================================================================================================
+    // POSITION
+
+    private int position;
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    //================================================================================================
     // RecyclerView.Adapter Methods
 
     @Override
@@ -44,6 +57,8 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListViewHolder> {
         holder.btn_delete_note.setOnClickListener(holder);
 
         parentFragment.registerForContextMenu(holder.parentLayout);
+
+        holder.itemView.setOnLongClickListener(null);
     }
 
     @Override

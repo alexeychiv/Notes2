@@ -1,6 +1,8 @@
 package gb.android.notes2.view.notelist;
 
 import android.content.res.Configuration;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -10,10 +12,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import gb.android.notes2.App;
-import gb.android.notes2.view.NoteEditorFragment;
 import gb.android.notes2.R;
+import gb.android.notes2.view.NoteEditorFragment;
 
-public class NoteListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class NoteListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
 
     NoteListAdapter adapter;
 
@@ -36,10 +38,19 @@ public class NoteListViewHolder extends RecyclerView.ViewHolder implements View.
         btn_delete_note = itemView.findViewById(R.id.btn_list_deleteNote);
 
         parentLayout = itemView.findViewById(R.id.rv_noteListItem);
+
+        itemView.setOnCreateContextMenuListener(this);
     }
 
     //===============================================================================================
     // EVENTS
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        Log.d("BLAH", "Create Context menu position = " + getAdapterPosition());
+        App.getNoteListAdapter().setPosition(getAdapterPosition());
+        App.getMainActivity().getMenuInflater().inflate(R.menu.menu_note_list_context, menu);
+    }
 
     @Override
     public void onClick(View v) {
@@ -56,7 +67,7 @@ public class NoteListViewHolder extends RecyclerView.ViewHolder implements View.
     //===============================================================================================
     // ONCLICK METHODS
 
-    void openNoteEditor() {
+    private void openNoteEditor() {
         App.getInstance().setIntPref("id", id);
 
         FragmentManager fragmentManager = App.getMainActivity().getSupportFragmentManager();
@@ -64,21 +75,21 @@ public class NoteListViewHolder extends RecyclerView.ViewHolder implements View.
         fragmentManager.popBackStackImmediate();
 
         if (App.getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT) {
-                    fragmentManager
-                            .beginTransaction()
-                            .replace(R.id.container, NoteEditorFragment.newInstance())
-                            .addToBackStack(null)
-                            .commit();
+            fragmentManager
+                    .beginTransaction()
+                    .replace(R.id.container, NoteEditorFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit();
         } else {
-                    fragmentManager
-                            .beginTransaction()
-                            .replace(R.id.container_right, NoteEditorFragment.newInstance())
-                            .addToBackStack(null)
-                            .commit();
+            fragmentManager
+                    .beginTransaction()
+                    .replace(R.id.container_right, NoteEditorFragment.newInstance())
+                    .addToBackStack(null)
+                    .commit();
         }
     }
 
-    void deleteNote() {
+    private void deleteNote() {
         if (App.getInstance().getIntPref("id") == id) {
             App.getInstance().setIntPref("id", -1);
 
@@ -91,5 +102,4 @@ public class NoteListViewHolder extends RecyclerView.ViewHolder implements View.
         App.getNoteListItemSource().updateData();
         adapter.notifyDataSetChanged();
     }
-
 }
