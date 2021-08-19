@@ -175,16 +175,16 @@ public class NoteEditorFragment extends Fragment implements View.OnClickListener
         App.getNoteListItemSource().deleteNote(id);
         App.getNoteListItemSource().updateData();
 
-        if (App.getNoteListAdapter() != null)
-            App.getNoteListAdapter().notifyDataSetChanged();
+        if (ViewManager.getNoteListAdapter() != null)
+            ViewManager.getNoteListAdapter().notifyDataSetChanged();
     }
 
     private void saveNote() {
         App.getNoteListItemSource().updateNoteItemById(id, et_title_note.getText().toString(), tv_date_note.getText().toString());
         App.getNoteListItemSource().updateNoteTextById(id, etml_text_note.getText().toString());
         App.getNoteListItemSource().updateData();
-        if (App.getNoteListAdapter() != null)
-            App.getNoteListAdapter().notifyDataSetChanged();
+        if (ViewManager.getNoteListAdapter() != null)
+            ViewManager.getNoteListAdapter().notifyDataSetChanged();
     }
 
     private void popupMenu(View v) {

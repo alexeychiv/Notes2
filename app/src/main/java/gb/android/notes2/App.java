@@ -11,10 +11,6 @@ public class App extends Application {
 
     private NoteListItemSource noteListItemSource;
 
-    private MainActivity mainActivity;
-
-    private NoteListAdapter noteListAdapter;
-
     //===============================================================================================
     // STATICS
 
@@ -31,29 +27,6 @@ public class App extends Application {
         return instance.noteListItemSource;
     }
 
-    static public MainActivity getMainActivity() {
-        return instance.mainActivity;
-    }
-
-    static public NoteListAdapter getNoteListAdapter() {
-        return instance.noteListAdapter;
-    }
-
-    static public int getScreenOrientation() {
-        return instance.getResources().getConfiguration().orientation;
-    }
-
-    //===============================================================================================
-    // STATIC SETTERS
-
-    static public void setMainActivity(MainActivity mainActivity) {
-        instance.mainActivity = mainActivity;
-    }
-
-    static public void setNoteListAdapter(NoteListAdapter noteListAdapter) {
-        instance.noteListAdapter = noteListAdapter;
-    }
-
     //===============================================================================================
     // EVENTS
 
@@ -61,7 +34,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         init();
-
     }
 
     //===============================================================================================

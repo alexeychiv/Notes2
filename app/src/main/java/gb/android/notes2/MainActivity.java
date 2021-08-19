@@ -15,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 
 import gb.android.notes2.view.NoteListFragment;
+import gb.android.notes2.view.ViewManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
     //================================================================================================
 
     private void startFragments() {
-        if (App.getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT)
+        if (ViewManager.getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT)
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.container, NoteListFragment.newInstance())
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        App.setMainActivity(this);
+        ViewManager.setMainActivity(this);
 
         initToolbar();
         initDrawer(toolbar);
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-        App.getNoteListAdapter().notifyDataSetChanged();
+        ViewManager.getNoteListAdapter().notifyDataSetChanged();
 
         return super.onOptionsItemSelected(item);
     }
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
 
-                App.getNoteListAdapter().notifyDataSetChanged();
+                ViewManager.getNoteListAdapter().notifyDataSetChanged();
 
                 drawerLayout.closeDrawer(GravityCompat.START);
 

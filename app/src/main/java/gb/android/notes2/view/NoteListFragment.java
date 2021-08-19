@@ -52,7 +52,7 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
         noteListAdapter = new NoteListAdapter(this);
         rv_notesList.setAdapter(noteListAdapter);
 
-        App.setNoteListAdapter(noteListAdapter);
+        ViewManager.setNoteListAdapter(noteListAdapter);
 
         btn_new.setOnClickListener(this);
     }
@@ -73,7 +73,7 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
         init(getView());
 
         if (App.getInstance().getIntPref("id") > -1) {
-            if (App.getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT) {
+            if (ViewManager.getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT) {
                 getParentFragmentManager()
                         .beginTransaction()
                         .replace(R.id.container, NoteEditorFragment.newInstance())
@@ -92,7 +92,7 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onPause() {
         super.onPause();
-        App.setNoteListAdapter(null);
+        ViewManager.setNoteListAdapter(null);
     }
 
     @Override
@@ -134,19 +134,19 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
     }
 
     private void deleteNote() {
-        int id = App.getNoteListItemSource().getNoteListItemByPos(App.getNoteListAdapter().getPosition()).getId();
+        int id = App.getNoteListItemSource().getNoteListItemByPos(ViewManager.getNoteListAdapter().getPosition()).getId();
 
         if (App.getInstance().getIntPref("id") == id) {
             App.getInstance().setIntPref("id", -1);
 
-            if (App.getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
-                App.getMainActivity().getSupportFragmentManager().popBackStack();
+            if (ViewManager.getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
+                ViewManager.getMainActivity().getSupportFragmentManager().popBackStack();
             }
         }
 
         App.getNoteListItemSource().deleteNote(id);
         App.getNoteListItemSource().updateData();
-        App.getNoteListAdapter().notifyDataSetChanged();
+        ViewManager.getNoteListAdapter().notifyDataSetChanged();
     }
 
 }

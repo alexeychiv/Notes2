@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import gb.android.notes2.App;
 import gb.android.notes2.R;
 import gb.android.notes2.view.NoteEditorFragment;
+import gb.android.notes2.view.ViewManager;
 
 public class NoteListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {
 
@@ -47,9 +48,8 @@ public class NoteListViewHolder extends RecyclerView.ViewHolder implements View.
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        Log.d("BLAH", "Create Context menu position = " + getAdapterPosition());
-        App.getNoteListAdapter().setPosition(getAdapterPosition());
-        App.getMainActivity().getMenuInflater().inflate(R.menu.menu_note_list_context, menu);
+        ViewManager.getNoteListAdapter().setPosition(getAdapterPosition());
+        ViewManager.getMainActivity().getMenuInflater().inflate(R.menu.menu_note_list_context, menu);
     }
 
     @Override
@@ -70,11 +70,11 @@ public class NoteListViewHolder extends RecyclerView.ViewHolder implements View.
     private void openNoteEditor() {
         App.getInstance().setIntPref("id", id);
 
-        FragmentManager fragmentManager = App.getMainActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = ViewManager.getMainActivity().getSupportFragmentManager();
 
         fragmentManager.popBackStackImmediate();
 
-        if (App.getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT) {
+        if (ViewManager.getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT) {
             fragmentManager
                     .beginTransaction()
                     .replace(R.id.container, NoteEditorFragment.newInstance())
@@ -93,8 +93,8 @@ public class NoteListViewHolder extends RecyclerView.ViewHolder implements View.
         if (App.getInstance().getIntPref("id") == id) {
             App.getInstance().setIntPref("id", -1);
 
-            if (App.getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
-                App.getMainActivity().getSupportFragmentManager().popBackStack();
+            if (ViewManager.getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
+                ViewManager.getMainActivity().getSupportFragmentManager().popBackStack();
             }
         }
 

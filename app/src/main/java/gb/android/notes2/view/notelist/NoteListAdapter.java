@@ -65,4 +65,6 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListViewHolder> {
     public int getItemCount() {
         return App.getNoteListItemSource().size();
     }
+
+
 }
