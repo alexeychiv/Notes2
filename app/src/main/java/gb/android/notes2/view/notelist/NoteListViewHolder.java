@@ -1,7 +1,6 @@
 package gb.android.notes2.view.notelist;
 
 import android.content.res.Configuration;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.View;
 
@@ -20,7 +19,7 @@ public class NoteListViewHolder extends RecyclerView.ViewHolder implements View.
 
     NoteListAdapter adapter;
 
-    int id;
+    String id;
 
     AppCompatTextView tv_title_line;
     AppCompatTextView tv_date_line;
@@ -68,30 +67,19 @@ public class NoteListViewHolder extends RecyclerView.ViewHolder implements View.
     // ONCLICK METHODS
 
     private void openNoteEditor() {
-        App.getInstance().setIntPref("id", id);
-
         FragmentManager fragmentManager = ViewManager.getMainActivity().getSupportFragmentManager();
 
         fragmentManager.popBackStackImmediate();
 
-        if (ViewManager.getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT) {
-            fragmentManager
-                    .beginTransaction()
-                    .replace(R.id.container, NoteEditorFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit();
-        } else {
-            fragmentManager
-                    .beginTransaction()
-                    .replace(R.id.container_right, NoteEditorFragment.newInstance())
-                    .addToBackStack(null)
-                    .commit();
+        if (!id.equals("empty")) {
+            App.getInstance().setStrPref("id", id);
+            ViewManager.startEditor();
         }
     }
 
     private void deleteNote() {
-        if (App.getInstance().getIntPref("id") == id) {
-            App.getInstance().setIntPref("id", -1);
+        if (App.getInstance().getStrPref("id").equals(id)) {
+            App.getInstance().setStrPref("id", "empty");
 
             if (ViewManager.getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
                 ViewManager.getMainActivity().getSupportFragmentManager().popBackStack();
@@ -99,7 +87,5 @@ public class NoteListViewHolder extends RecyclerView.ViewHolder implements View.
         }
 
         App.getNoteListItemSource().deleteNote(id);
-        App.getNoteListItemSource().updateData();
-        adapter.notifyDataSetChanged();
     }
 }

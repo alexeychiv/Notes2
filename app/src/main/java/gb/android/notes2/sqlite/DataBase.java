@@ -193,7 +193,12 @@ public class DataBase extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst())
             do {
-                returnList.add(new NoteListItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
+                returnList.add(new NoteListItem(
+                        String.valueOf(cursor.getInt(0)),
+                        cursor.getString(1),
+                        cursor.getString(2))
+                );
+
             } while (cursor.moveToNext());
 
         cursor.close();
@@ -215,7 +220,11 @@ public class DataBase extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
 
         if (cursor.moveToFirst())
-            noteListItem = new NoteListItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2));
+            noteListItem = new NoteListItem(
+                    String.valueOf(cursor.getInt(0)),
+                    cursor.getString(1),
+                    cursor.getString(2)
+            );
 
         cursor.close();
         db.close();

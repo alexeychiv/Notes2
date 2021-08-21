@@ -1,11 +1,13 @@
 package gb.android.notes2;
 
 import android.app.Application;
+import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.NonNull;
+
 import gb.android.notes2.model.NoteListItemSource;
-import gb.android.notes2.model.NoteListItemSourceImpl;
-import gb.android.notes2.view.notelist.NoteListAdapter;
+import gb.android.notes2.model.NoteListItemSourceImplFirestore;
 
 public class App extends Application {
 
@@ -36,12 +38,21 @@ public class App extends Application {
         init();
     }
 
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+    }
+
     //===============================================================================================
     // INIT
 
     private void init() {
         App.instance = this;
-        noteListItemSource = new NoteListItemSourceImpl(getBaseContext());
+
+        //noteListItemSource = new NoteListItemSourceImplSQL(getBaseContext());
+
+        noteListItemSource = new NoteListItemSourceImplFirestore();
     }
 
     //===============================================================================================
@@ -56,6 +67,18 @@ public class App extends Application {
                 .getDefaultSharedPreferences(getBaseContext())
                 .edit()
                 .putInt(key, value)
+                .apply();
+    }
+
+    public String getStrPref(String key) {
+        return PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getString(key, "empty");
+    }
+
+    public void setStrPref(String key, String value) {
+        PreferenceManager
+                .getDefaultSharedPreferences(getBaseContext())
+                .edit()
+                .putString(key, value)
                 .apply();
     }
 }

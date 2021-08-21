@@ -39,8 +39,11 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListViewHolder> {
 
     @Override
     public NoteListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
         return new NoteListViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.note_list_item, parent, false));
     }
+
+
 
     @Override
     public void onBindViewHolder(NoteListViewHolder holder, int position) {
@@ -65,6 +68,4 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListViewHolder> {
     public int getItemCount() {
         return App.getNoteListItemSource().size();
     }
-
-
 }

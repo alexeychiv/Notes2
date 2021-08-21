@@ -7,16 +7,16 @@ import java.util.List;
 import gb.android.notes2.App;
 import gb.android.notes2.sqlite.DataBase;
 
-public class NoteListItemSourceImpl implements NoteListItemSource {
+public class NoteListItemSourceImplSQL /*implements NoteListItemSource*/ {
+/*
+    private DataBase db;
 
-    DataBase db;
-
-    List<NoteListItem> listNotes;
+    private List<NoteListItem> listNotes;
 
     // ===================================================================================================
     // CONSTRUCTOR
 
-    public NoteListItemSourceImpl(Context context) {
+    public NoteListItemSourceImplSQL(Context context) {
         db = new DataBase(context);
         loadList();
     }
@@ -44,6 +44,15 @@ public class NoteListItemSourceImpl implements NoteListItemSource {
     // NoteListItemSource Methods
 
     @Override
+    public NoteListItemSource init(NoteListSourceResponse noteListSourceResponse) {
+
+        if (noteListSourceResponse != null)
+            noteListSourceResponse.initialized(this);
+
+        return this;
+    }
+
+    @Override
     public void updateData() {
         loadList();
     }
@@ -59,8 +68,8 @@ public class NoteListItemSourceImpl implements NoteListItemSource {
     }
 
     @Override
-    public NoteListItem getNoteListItemById(int id) {
-        return db.getNoteListItem(id);
+    public NoteListItem getNoteListItemById(String id) {
+        return db.getNoteListItem(Integer.parseInt(id));
     }
 
     @Override
@@ -76,8 +85,8 @@ public class NoteListItemSourceImpl implements NoteListItemSource {
     }
 
     @Override
-    public void deleteNote(int id) {
-        db.deleteNote(id);
+    public void deleteNote(String id) {
+        db.deleteNote(Integer.parseInt(id));
         listNotes = db.getNotesList();
     }
 
@@ -88,17 +97,19 @@ public class NoteListItemSourceImpl implements NoteListItemSource {
     }
 
     @Override
-    public String getNoteTextById(int id) {
-        return db.getNoteText(id);
+    public String getNoteTextById(String id) {
+        return db.getNoteText(Integer.parseInt(id));
     }
 
     @Override
-    public void updateNoteItemById(int id, String title, String date) {
-        db.updateNoteItem(id, title, date);
+    public void updateNoteItemById(String id, String title, String date) {
+        db.updateNoteItem(Integer.parseInt(id), title, date);
     }
 
     @Override
-    public void updateNoteTextById(int id, String text) {
-        db.updateNoteText(id, text);
+    public void updateNoteTextById(String id, String text) {
+        db.updateNoteText(Integer.parseInt(id), text);
     }
+
+ */
 }

@@ -1,25 +1,25 @@
 package gb.android.notes2.model;
 
 public interface NoteListItemSource {
+    NoteListItemSource init (NoteListSourceResponse noteListSourceResponse);
+
     void updateData();
 
     int size();
 
     NoteListItem getNoteListItemByPos(int position);
 
-    NoteListItem getNoteListItemById(int id);
+    void requestNoteListItemById(String id);
 
     void setSort(int sortType);
 
     void addNote();
 
-    void deleteNote(int position);
+    void deleteNote(String position);
 
     void deleteAll();
 
-    String getNoteTextById(int id);
+    void updateNoteItemById(String id, String title, String date);
 
-    void updateNoteItemById(int id, String title, String date);
-
-    void updateNoteTextById(int id, String text);
+    void updateNoteTextById(String id, String text);
 }

@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
     }
 
-
     //================================================================================================
     // EVENTS
 
@@ -57,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
 
-        App.getInstance().setIntPref("id", -1);
-
+        App.getInstance().setStrPref("id", "empty");
     }
 
     //================================================================================================

@@ -2,6 +2,7 @@ package gb.android.notes2.view;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,9 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import gb.android.notes2.App;
 import gb.android.notes2.R;
+import gb.android.notes2.model.NoteListItem;
 import gb.android.notes2.view.notelist.NoteListAdapter;
+import observer.DataChangeObserver;
+import observer.NoteReadyObserver;
 
-public class NoteListFragment extends Fragment implements View.OnClickListener {
+public class NoteListFragment extends Fragment implements View.OnClickListener, DataChangeObserver {
 
     AppCompatButton btn_new;
 
@@ -54,6 +58,8 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
 
         ViewManager.setNoteListAdapter(noteListAdapter);
 
+        ViewManager.getPublisher().subscribeDataChange(this);
+
         btn_new.setOnClickListener(this);
     }
 
@@ -72,26 +78,18 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
 
         init(getView());
 
-        if (App.getInstance().getIntPref("id") > -1) {
-            if (ViewManager.getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT) {
-                getParentFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container, NoteEditorFragment.newInstance())
-                        .addToBackStack("")
-                        .commit();
-            } else {
-                getParentFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.container_right, NoteEditorFragment.newInstance())
-                        .addToBackStack("")
-                        .commit();
-            }
+        String id = App.getInstance().getStrPref("id");
+
+        if (!id.equals("empty")) {
+            ViewManager.startEditor();
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        ViewManager.getPublisher().unsubscribeDataChange(this);
+
         ViewManager.setNoteListAdapter(null);
     }
 
@@ -100,8 +98,6 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.btn_new:
                 App.getNoteListItemSource().addNote();
-                App.getNoteListItemSource().updateData();
-                noteListAdapter.notifyDataSetChanged();
                 break;
         }
     }
@@ -127,17 +123,16 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
     // CONTEXT MENU Methods
 
     private void deleteAll() {
-        App.getInstance().setIntPref("id", -1);
+        App.getInstance().setStrPref("id", "empty");
         getParentFragmentManager().popBackStack();
         App.getNoteListItemSource().deleteAll();
-        noteListAdapter.notifyDataSetChanged();
     }
 
     private void deleteNote() {
-        int id = App.getNoteListItemSource().getNoteListItemByPos(ViewManager.getNoteListAdapter().getPosition()).getId();
+        String id = App.getNoteListItemSource().getNoteListItemByPos(ViewManager.getNoteListAdapter().getPosition()).getId();
 
-        if (App.getInstance().getIntPref("id") == id) {
-            App.getInstance().setIntPref("id", -1);
+        if (App.getInstance().getStrPref("id").equals(id)) {
+            App.getInstance().setStrPref("id", "empty");
 
             if (ViewManager.getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
                 ViewManager.getMainActivity().getSupportFragmentManager().popBackStack();
@@ -145,8 +140,10 @@ public class NoteListFragment extends Fragment implements View.OnClickListener {
         }
 
         App.getNoteListItemSource().deleteNote(id);
-        App.getNoteListItemSource().updateData();
-        ViewManager.getNoteListAdapter().notifyDataSetChanged();
     }
 
+    @Override
+    public void update() {
+        noteListAdapter.notifyDataSetChanged();
+    }
 }

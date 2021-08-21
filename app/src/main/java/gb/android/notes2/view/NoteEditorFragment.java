@@ -20,10 +20,11 @@ import gb.android.notes2.App;
 import gb.android.notes2.R;
 import gb.android.notes2.model.NoteListItem;
 import gb.android.notes2.utils.NoteDate;
+import observer.NoteReadyObserver;
 
-public class NoteEditorFragment extends Fragment implements View.OnClickListener {
+public class NoteEditorFragment extends Fragment implements View.OnClickListener, NoteReadyObserver {
 
-    private int id;
+    private String id;
 
     AppCompatEditText et_title_note;
     AppCompatTextView tv_date_note;
@@ -43,7 +44,7 @@ public class NoteEditorFragment extends Fragment implements View.OnClickListener
         if (instance == null)
             return;
 
-        App.getInstance().setIntPref("id", -1);
+        App.getInstance().setStrPref("id", "empty");
 
         instance.getParentFragmentManager().popBackStack();
         instance = null;
@@ -105,20 +106,28 @@ public class NoteEditorFragment extends Fragment implements View.OnClickListener
     }
 
     private void loadNote() {
-        id = App.getInstance().getIntPref("id");
+        String id = App.getInstance().getStrPref("id");
 
-        if (id > -1) {
-            NoteListItem note = App.getNoteListItemSource().getNoteListItemById(id);
-
-            if (note != null) {
-                et_title_note.setText(note.getTitle());
-                tv_date_note.setText(note.getDate());
-            }
-
-            etml_text_note.setText(App.getNoteListItemSource().getNoteTextById(id));
-        } else {
-            getParentFragmentManager().popBackStack();
+        if (id.equals("empty")){
+            ViewManager.getMainActivity().getSupportFragmentManager().popBackStack();
+            return;
         }
+
+        App.getNoteListItemSource().requestNoteListItemById(id);
+    }
+
+    //================================================================================================
+    //OBSERVER
+
+    @Override
+    public void receiveNote(NoteListItem noteListItem, String text) {
+        App.getInstance().setStrPref("id", noteListItem.getId());
+
+        this.id = noteListItem.getId();
+
+        et_title_note.setText(noteListItem.getTitle());
+        tv_date_note.setText(noteListItem.getDate());
+        etml_text_note.setText(text);
     }
 
     //================================================================================================
@@ -136,8 +145,19 @@ public class NoteEditorFragment extends Fragment implements View.OnClickListener
         instance = this;
 
         init(getView());
+
+
+        ViewManager.getPublisher().subscribeNoteReady(this);
         loadNote();
+
         initDatePicker();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        ViewManager.getPublisher().unsubscribeNoteReady(this);
     }
 
     @Override
@@ -173,18 +193,11 @@ public class NoteEditorFragment extends Fragment implements View.OnClickListener
 
     private void deleteNote() {
         App.getNoteListItemSource().deleteNote(id);
-        App.getNoteListItemSource().updateData();
-
-        if (ViewManager.getNoteListAdapter() != null)
-            ViewManager.getNoteListAdapter().notifyDataSetChanged();
     }
 
     private void saveNote() {
         App.getNoteListItemSource().updateNoteItemById(id, et_title_note.getText().toString(), tv_date_note.getText().toString());
         App.getNoteListItemSource().updateNoteTextById(id, etml_text_note.getText().toString());
-        App.getNoteListItemSource().updateData();
-        if (ViewManager.getNoteListAdapter() != null)
-            ViewManager.getNoteListAdapter().notifyDataSetChanged();
     }
 
     private void popupMenu(View v) {
@@ -208,4 +221,6 @@ public class NoteEditorFragment extends Fragment implements View.OnClickListener
 
         popupMenu.show();
     }
+
+
 }

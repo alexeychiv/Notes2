@@ -1,16 +1,18 @@
 package gb.android.notes2.model;
 
+import android.util.Log;
+
 import java.util.Locale;
 
 public class NoteListItem implements Comparable<NoteListItem> {
-    final private int id;
+    final private String id;
     final private String title;
     final private String date;
 
     //===============================================================================================
     // GETTERS
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -25,7 +27,12 @@ public class NoteListItem implements Comparable<NoteListItem> {
     //===============================================================================================
     // CONSTRUCTOR
 
-    public NoteListItem(int id, String title, String date) {
+    public NoteListItem(String id, String title, String date) {
+        Log.d("BLAH", "NoteListItemSourceImplFirestore --> NoteListItem() --> id = " + id
+                + " title = " + title
+                + " date = " + date
+        );
+
         this.id = id;
         this.title = title;
         this.date = date;
@@ -54,12 +61,9 @@ public class NoteListItem implements Comparable<NoteListItem> {
     }
 
     public int compareIdAsc(NoteListItem o) {
-        if (id == o.getId())
+        if (id.equals(o.getId()))
             return 0;
 
-        if (id > o.getId())
-            return 1;
-
-        return -1;
+        return id.compareTo(o.getId());
     }
 }
