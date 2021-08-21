@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import gb.android.notes2.App;
 import gb.android.notes2.R;
-import gb.android.notes2.view.NoteEditorFragment;
 import gb.android.notes2.view.ViewManager;
 
 public class NoteListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener {

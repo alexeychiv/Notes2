@@ -25,11 +25,9 @@ import gb.android.notes2.view.ViewManager;
 
 public class NoteListItemSourceImplFirestore implements NoteListItemSource {
 
-    private static String NOTES_COLLECTION = "notes";
+    private static final String NOTES_COLLECTION = "notes";
 
-    private FirebaseFirestore store;
-
-    private CollectionReference collectionReferenceNotes;
+    private final CollectionReference collectionReferenceNotes;
 
     List<NoteListItem> listNotes;
 
@@ -37,10 +35,7 @@ public class NoteListItemSourceImplFirestore implements NoteListItemSource {
     // CONSTRUCTOR
 
     public NoteListItemSourceImplFirestore() {
-        store = FirebaseFirestore.getInstance();
-
-        collectionReferenceNotes = store.collection(NOTES_COLLECTION);
-
+        collectionReferenceNotes = FirebaseFirestore.getInstance().collection(NOTES_COLLECTION);
         updateData();
     }
 
@@ -106,13 +101,7 @@ public class NoteListItemSourceImplFirestore implements NoteListItemSource {
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-
-                        String text;
-
-                        if (task.getResult().getData() == null)
-                            text = "";
-                        else
-                            text = (String)task.getResult().getData().get("text");
+                        String text = (String) task.getResult().getData().get("text");
 
                         ViewManager.getPublisher().notifyNoteReady(noteListItem, text);
                     }
@@ -196,6 +185,8 @@ public class NoteListItemSourceImplFirestore implements NoteListItemSource {
     @Override
     public void setSort(int sortType) {
         App.getInstance().setIntPref("sort", sortType);
+        sortList();
+        ViewManager.getPublisher().notifyDataChanged();
     }
 
     @Override

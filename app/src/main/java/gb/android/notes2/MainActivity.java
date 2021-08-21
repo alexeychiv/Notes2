@@ -86,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-        ViewManager.getNoteListAdapter().notifyDataSetChanged();
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -126,8 +124,6 @@ public class MainActivity extends AppCompatActivity {
                         App.getNoteListItemSource().setSort(2);
                         break;
                 }
-
-                ViewManager.getNoteListAdapter().notifyDataSetChanged();
 
                 drawerLayout.closeDrawer(GravityCompat.START);
 

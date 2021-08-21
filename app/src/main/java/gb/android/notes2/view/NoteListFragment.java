@@ -2,7 +2,6 @@ package gb.android.notes2.view;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,10 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import gb.android.notes2.App;
 import gb.android.notes2.R;
-import gb.android.notes2.model.NoteListItem;
 import gb.android.notes2.view.notelist.NoteListAdapter;
 import observer.DataChangeObserver;
-import observer.NoteReadyObserver;
 
 public class NoteListFragment extends Fragment implements View.OnClickListener, DataChangeObserver {
 

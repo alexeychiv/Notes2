@@ -43,8 +43,6 @@ public class NoteListAdapter extends RecyclerView.Adapter<NoteListViewHolder> {
         return new NoteListViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.note_list_item, parent, false));
     }
 
-
-
     @Override
     public void onBindViewHolder(NoteListViewHolder holder, int position) {
         NoteListItem noteListItem = App.getNoteListItemSource().getNoteListItemByPos(position);

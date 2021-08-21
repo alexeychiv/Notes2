@@ -27,7 +27,7 @@ public class NoteItemTranslate {
     }
 
     public static Map<String, Object> noteListItemToDoc(NoteListItem noteListItem) {
-        Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<>();
 
         result.put(Fields.TITLE, noteListItem.getTitle());
         result.put(Fields.DATE, noteListItem.getDate());
