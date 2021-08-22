@@ -81,10 +81,11 @@ public class NoteListItemSourceImplFirestore implements NoteListItemSource {
         collectionReferenceNotes
                 .document(id)
                 .collection("text")
-                .add(textMap)
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                .document("text")
+                .set(textMap, SetOptions.merge())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                    public void onComplete(@NonNull Task<Void> task) {
                         loadList();
                     }
                 });
@@ -99,11 +100,7 @@ public class NoteListItemSourceImplFirestore implements NoteListItemSource {
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        String text = "";
-
-                        if (task.getResult().getData() != null)
-                            text = (String) task.getResult().getData().get("text");
-
+                        String text = (String) task.getResult().getData().get("text");
                         ViewManager.getPublisher().notifyNoteReady(noteListItem, text);
                     }
                 });
