@@ -1,7 +1,5 @@
 package firestore;
 
-import android.util.Log;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,13 +14,6 @@ public class NoteItemTranslate {
     }
 
     public static NoteListItem docToNoteListItem(String id, Map<String, Object> doc) {
-
-        Log.d("BLAH", "NoteItemTranslate --> id = " + id
-                + " title = " + (String) doc.get(Fields.TITLE)
-                + " date = " + (String) doc.get(Fields.DATE)
-                + " textId = " + (String) doc.get(Fields.TEXT_ID)
-        );
-
         return new NoteListItem(id, (String) doc.get(Fields.TITLE), (String) doc.get(Fields.DATE));
     }
 

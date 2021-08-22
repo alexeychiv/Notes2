@@ -1,7 +1,5 @@
 package gb.android.notes2.model;
 
-import android.util.Log;
-
 import java.util.Locale;
 
 public class NoteListItem implements Comparable<NoteListItem> {
@@ -28,11 +26,6 @@ public class NoteListItem implements Comparable<NoteListItem> {
     // CONSTRUCTOR
 
     public NoteListItem(String id, String title, String date) {
-        Log.d("BLAH", "NoteListItemSourceImplFirestore --> NoteListItem() --> id = " + id
-                + " title = " + title
-                + " date = " + date
-        );
-
         this.id = id;
         this.title = title;
         this.date = date;

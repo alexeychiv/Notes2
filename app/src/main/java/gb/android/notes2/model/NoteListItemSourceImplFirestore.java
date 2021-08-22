@@ -1,7 +1,5 @@
 package gb.android.notes2.model;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -101,7 +99,10 @@ public class NoteListItemSourceImplFirestore implements NoteListItemSource {
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        String text = (String) task.getResult().getData().get("text");
+                        String text = "";
+
+                        if (task.getResult().getData() != null)
+                            text = (String) task.getResult().getData().get("text");
 
                         ViewManager.getPublisher().notifyNoteReady(noteListItem, text);
                     }
@@ -138,11 +139,7 @@ public class NoteListItemSourceImplFirestore implements NoteListItemSource {
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        Log.d("BLAH", "NoteListItemSourceImplFirestore init onComplete");
-
                         if (task.isSuccessful()) {
-                            Log.d("BLAH", "NoteListItemSourceImplFirestore init filling list");
-
                             for (QueryDocumentSnapshot doc : task.getResult())
                                 listNotes.add(NoteItemTranslate.docToNoteListItem(doc.getId(), doc.getData()));
 
@@ -196,7 +193,7 @@ public class NoteListItemSourceImplFirestore implements NoteListItemSource {
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
-                        setTextForNote(task.getResult().getId(), "");
+                        setTextForNote(task.getResult().getId(), "Note text");
                     }
                 });
     }
