@@ -193,7 +193,7 @@ public class NoteListItemSourceImplFirestore implements NoteListItemSource {
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
-                        setTextForNote(task.getResult().getId(), "Note text");
+                        setTextForNote(task.getResult().getId(), "");
                     }
                 });
     }
