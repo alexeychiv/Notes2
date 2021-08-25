@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import gb.android.notes2.App;
 import gb.android.notes2.R;
+import gb.android.notes2.view.notelist.DialogDeleteAllConfirmation;
 import gb.android.notes2.view.notelist.NoteListAdapter;
 import observer.DataChangeObserver;
 
@@ -109,7 +110,10 @@ public class NoteListFragment extends Fragment implements View.OnClickListener, 
                 deleteNote();
                 break;
             case R.id.menu_note_list_deleteAll:
-                deleteAll();
+                DialogDeleteAllConfirmation dialogBuilderFragment = new DialogDeleteAllConfirmation();
+                dialogBuilderFragment.show(ViewManager.getMainActivity().getSupportFragmentManager(),"TAG");
+
+                //deleteAll();
                 break;
         }
 
@@ -138,6 +142,9 @@ public class NoteListFragment extends Fragment implements View.OnClickListener, 
 
         App.getNoteListItemSource().deleteNote(id);
     }
+
+    //===============================================================================================
+    // OBSERVER
 
     @Override
     public void update() {

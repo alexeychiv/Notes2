@@ -14,4 +14,8 @@
 	<string name="drawerHeader_statusText">Все сложно...</string>
 	<string name="delete_all">Delete All</string>
 	<string name="delete_this">Delete this</string>
+	<string name="all_notes_will_be_deleted">All notes will be deleted!</string>
+	<string name="are_you_sure">Are you sure?</string>
+	<string name="yes">Yes</string>
+	<string name="no">No</string>
 </resources>
