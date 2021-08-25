@@ -146,7 +146,6 @@ public class NoteEditorFragment extends Fragment implements View.OnClickListener
 
         init(getView());
 
-
         ViewManager.getPublisher().subscribeNoteReady(this);
         loadNote();
 

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import gb.android.notes2.App;
 import gb.android.notes2.R;
 import gb.android.notes2.view.notelist.DialogDeleteAllConfirmation;
+import gb.android.notes2.view.notelist.DialogEditNote;
 import gb.android.notes2.view.notelist.NoteListAdapter;
 import observer.DataChangeObserver;
 
@@ -106,6 +107,18 @@ public class NoteListFragment extends Fragment implements View.OnClickListener, 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_note_list_edit:
+                ViewManager.getMainActivity().getSupportFragmentManager().popBackStack();
+                App.getInstance().setStrPref("id", "empty");
+
+                int position = ViewManager.getNoteListAdapter().getPosition();
+                String id = App.getNoteListItemSource().getNoteListItemByPos(position).getId();
+
+                App.getInstance().setStrPref("id_dialog", id);
+
+                DialogEditNote dialogEditNote = new DialogEditNote();
+                dialogEditNote.show(ViewManager.getMainActivity().getSupportFragmentManager(),"TAG");
+                break;
             case R.id.menu_note_list_delete:
                 deleteNote();
                 break;
