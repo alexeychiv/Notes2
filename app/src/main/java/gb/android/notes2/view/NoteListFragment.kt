@@ -1,166 +1,152 @@
-package gb.android.notes2.view;
+package gb.android.notes2.view
 
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.content.res.Configuration
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatButton
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import gb.android.notes2.App.Companion.getNoteListItemSource
+import gb.android.notes2.App.Companion.instance
+import gb.android.notes2.R
+import gb.android.notes2.observer.DataChangeObserver
+import gb.android.notes2.view.ViewManager.mainActivity
+import gb.android.notes2.view.ViewManager.publisher
+import gb.android.notes2.view.ViewManager.screenOrientation
+import gb.android.notes2.view.ViewManager.startEditor
+import gb.android.notes2.view.notelist.DialogDeleteAllConfirmation
+import gb.android.notes2.view.notelist.DialogEditNote
+import gb.android.notes2.view.notelist.NoteListAdapter
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+class NoteListFragment : Fragment(), View.OnClickListener, DataChangeObserver {
 
-import gb.android.notes2.App;
-import gb.android.notes2.R;
-import gb.android.notes2.view.notelist.DialogDeleteAllConfirmation;
-import gb.android.notes2.view.notelist.DialogEditNote;
-import gb.android.notes2.view.notelist.NoteListAdapter;
-import observer.DataChangeObserver;
+    var btn_new: AppCompatButton? = null
+    private var rv_notesList: RecyclerView? = null
+    private var layoutManager: RecyclerView.LayoutManager? = null
 
-public class NoteListFragment extends Fragment implements View.OnClickListener, DataChangeObserver {
-
-    AppCompatButton btn_new;
-
-    private RecyclerView rv_notesList;
-    private static NoteListAdapter noteListAdapter;
-    private RecyclerView.LayoutManager layoutManager;
-
-    //================================================================================================
-    // CONSTRUCTOR
-
-    public static NoteListFragment newInstance() {
-        return new NoteListFragment();
-    }
-
-    public NoteListFragment() {
-
-    }
 
     //================================================================================================
-    //INIT
+    // STATICS
 
-    private void init(View view) {
-        btn_new = view.findViewById(R.id.btn_new);
+    companion object {
+        private var noteListAdapter: NoteListAdapter? = null
 
-        rv_notesList = view.findViewById(R.id.rv_noteList);
-        rv_notesList.setHasFixedSize(true);
-
-        layoutManager = new LinearLayoutManager(getContext());
-        rv_notesList.setLayoutManager(layoutManager);
-
-        noteListAdapter = new NoteListAdapter(this);
-        rv_notesList.setAdapter(noteListAdapter);
-
-        ViewManager.setNoteListAdapter(noteListAdapter);
-
-        ViewManager.getPublisher().subscribeDataChange(this);
-
-        btn_new.setOnClickListener(this);
+        fun newInstance(): NoteListFragment {
+            return NoteListFragment()
+        }
     }
+
+
+    //================================================================================================
+    // INIT
+
+    private fun init(view: View?) {
+        val btn_new = requireView().findViewById<AppCompatButton>(R.id.btn_new)
+
+        rv_notesList = requireView().findViewById<RecyclerView>(R.id.rv_noteList)
+        rv_notesList?.setHasFixedSize(true)
+
+        layoutManager = LinearLayoutManager(context)
+
+        rv_notesList?.layoutManager = layoutManager
+
+        noteListAdapter = NoteListAdapter(this)
+        rv_notesList?.adapter = noteListAdapter
+        ViewManager.noteListAdapter = noteListAdapter
+
+        publisher!!.subscribeDataChange(this)
+
+        btn_new.setOnClickListener(this)
+    }
+
 
     //================================================================================================
     // EVENTS
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_note_list, container, false);
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_note_list, container, false)
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        init(getView());
-
-        String id = App.getInstance().getStrPref("id");
-
-        if (!id.equals("empty")) {
-            ViewManager.startEditor();
+    override fun onResume() {
+        super.onResume()
+        init(view)
+        val id = instance!!.getStrPref("id")
+        if (id != "empty") {
+            startEditor()
         }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        ViewManager.getPublisher().unsubscribeDataChange(this);
-
-        ViewManager.setNoteListAdapter(null);
+    override fun onPause() {
+        super.onPause()
+        publisher!!.unsubscribeDataChange(this)
+        ViewManager.noteListAdapter = null
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_new:
-                App.getNoteListItemSource().addNote();
-                break;
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.btn_new -> getNoteListItemSource()!!.addNote()
         }
     }
+
 
     //================================================================================================
     // CONTEXT MENU
 
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_note_list_edit:
-                ViewManager.getMainActivity().getSupportFragmentManager().popBackStack();
-                App.getInstance().setStrPref("id", "empty");
-
-                int position = ViewManager.getNoteListAdapter().getPosition();
-                String id = App.getNoteListItemSource().getNoteListItemByPos(position).getId();
-
-                App.getInstance().setStrPref("id_dialog", id);
-
-                DialogEditNote dialogEditNote = new DialogEditNote();
-                dialogEditNote.show(ViewManager.getMainActivity().getSupportFragmentManager(),"TAG");
-                break;
-            case R.id.menu_note_list_delete:
-                deleteNote();
-                break;
-            case R.id.menu_note_list_deleteAll:
-                DialogDeleteAllConfirmation dialogBuilderFragment = new DialogDeleteAllConfirmation();
-                dialogBuilderFragment.show(ViewManager.getMainActivity().getSupportFragmentManager(),"TAG");
-
-                //deleteAll();
-                break;
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_note_list_edit -> {
+                mainActivity!!.supportFragmentManager.popBackStack()
+                instance!!.setStrPref("id", "empty")
+                val position = ViewManager.noteListAdapter!!.position
+                val id = getNoteListItemSource()!!.getNoteListItemByPos(position)?.id
+                instance!!.setStrPref("id_dialog", id)
+                val dialogEditNote = DialogEditNote()
+                dialogEditNote.show(mainActivity!!.supportFragmentManager, "TAG")
+            }
+            R.id.menu_note_list_delete -> deleteNote()
+            R.id.menu_note_list_deleteAll -> {
+                val dialogBuilderFragment = DialogDeleteAllConfirmation()
+                dialogBuilderFragment.show(mainActivity!!.supportFragmentManager, "TAG")
+            }
         }
-
-        return super.onContextItemSelected(item);
+        return super.onContextItemSelected(item)
     }
+
 
     //================================================================================================
     // CONTEXT MENU Methods
 
-    private void deleteAll() {
-        App.getInstance().setStrPref("id", "empty");
-        getParentFragmentManager().popBackStack();
-        App.getNoteListItemSource().deleteAll();
+    private fun deleteAll() {
+        instance!!.setStrPref("id", "empty")
+        parentFragmentManager.popBackStack()
+        getNoteListItemSource()!!.deleteAll()
     }
 
-    private void deleteNote() {
-        String id = App.getNoteListItemSource().getNoteListItemByPos(ViewManager.getNoteListAdapter().getPosition()).getId();
-
-        if (App.getInstance().getStrPref("id").equals(id)) {
-            App.getInstance().setStrPref("id", "empty");
-
-            if (ViewManager.getScreenOrientation() == Configuration.ORIENTATION_LANDSCAPE) {
-                ViewManager.getMainActivity().getSupportFragmentManager().popBackStack();
+    private fun deleteNote() {
+        val id = getNoteListItemSource()!!
+            .getNoteListItemByPos(ViewManager.noteListAdapter!!.position)?.id
+        if (instance!!.getStrPref("id") == id) {
+            instance!!.setStrPref("id", "empty")
+            if (screenOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                mainActivity!!.supportFragmentManager.popBackStack()
             }
         }
-
-        App.getNoteListItemSource().deleteNote(id);
+        getNoteListItemSource()!!.deleteNote(id)
     }
+
 
     //===============================================================================================
     // OBSERVER
 
-    @Override
-    public void update() {
-        noteListAdapter.notifyDataSetChanged();
+    override fun update() {
+        noteListAdapter!!.notifyDataSetChanged()
     }
 }

@@ -1,84 +1,76 @@
-package gb.android.notes2;
+package gb.android.notes2
 
-import android.app.Application;
-import android.content.res.Configuration;
-import android.preference.PreferenceManager;
+import android.app.Application
+import android.content.res.Configuration
+import gb.android.notes2.model.NoteListItemSource
+import gb.android.notes2.App
+import gb.android.notes2.model.NoteListItemSourceImplFirestore
+import android.preference.PreferenceManager
 
-import androidx.annotation.NonNull;
+class App : Application() {
 
-import gb.android.notes2.model.NoteListItemSource;
-import gb.android.notes2.model.NoteListItemSourceImplFirestore;
+    private var noteListItemSource: NoteListItemSource? = null
 
-public class App extends Application {
-
-    private NoteListItemSource noteListItemSource;
 
     //===============================================================================================
     // STATICS
 
-    static private App instance;
+    companion object {
+        @JvmStatic
+        var instance: App? = null
+            private set
 
-    static public App getInstance() {
-        return instance;
+        @JvmStatic
+        fun getNoteListItemSource(): NoteListItemSource? {
+            return instance!!.noteListItemSource
+        }
     }
 
-    //===============================================================================================
-    // STATIC GETTERS
-
-    static public NoteListItemSource getNoteListItemSource() {
-        return instance.noteListItemSource;
-    }
 
     //===============================================================================================
     // EVENTS
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        init();
+    override fun onCreate() {
+        super.onCreate()
+        init()
     }
 
-    @Override
-    public void onConfigurationChanged(@NonNull Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-    }
 
     //===============================================================================================
     // INIT
 
-    private void init() {
-        App.instance = this;
+    private fun init() {
+        instance = this
 
         //noteListItemSource = new NoteListItemSourceImplSQL(getBaseContext());
-
-        noteListItemSource = new NoteListItemSourceImplFirestore();
+        noteListItemSource = NoteListItemSourceImplFirestore()
     }
+
 
     //===============================================================================================
     // PREFERENCES
 
-    public int getIntPref(String key) {
-        return PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getInt(key, 0);
+    fun getIntPref(key: String?): Int {
+        return PreferenceManager.getDefaultSharedPreferences(baseContext).getInt(key, 0)
     }
 
-    public void setIntPref(String key, int value) {
+    fun setIntPref(key: String?, value: Int) {
         PreferenceManager
-                .getDefaultSharedPreferences(getBaseContext())
-                .edit()
-                .putInt(key, value)
-                .apply();
+            .getDefaultSharedPreferences(baseContext)
+            .edit()
+            .putInt(key, value)
+            .apply()
     }
 
-    public String getStrPref(String key) {
-        return PreferenceManager.getDefaultSharedPreferences(getBaseContext()).getString(key, "empty");
+    fun getStrPref(key: String?): String? {
+        return PreferenceManager.getDefaultSharedPreferences(baseContext).getString(key, "empty")
     }
 
-    public void setStrPref(String key, String value) {
+    fun setStrPref(key: String?, value: String?) {
         PreferenceManager
-                .getDefaultSharedPreferences(getBaseContext())
-                .edit()
-                .putString(key, value)
-                .apply();
+            .getDefaultSharedPreferences(baseContext)
+            .edit()
+            .putString(key, value)
+            .apply()
     }
 }

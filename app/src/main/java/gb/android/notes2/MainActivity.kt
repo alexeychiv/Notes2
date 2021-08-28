@@ -1,135 +1,119 @@
-package gb.android.notes2;
+package gb.android.notes2
 
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.content.res.Configuration
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
+import gb.android.notes2.App.Companion.getNoteListItemSource
+import gb.android.notes2.App.Companion.instance
+import gb.android.notes2.view.NoteListFragment
+import gb.android.notes2.view.ViewManager
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+class MainActivity : AppCompatActivity() {
+    var toolbar: Toolbar? = null
 
-import com.google.android.material.navigation.NavigationView;
-
-import gb.android.notes2.view.NoteListFragment;
-import gb.android.notes2.view.ViewManager;
-
-public class MainActivity extends AppCompatActivity {
-
-    Toolbar toolbar;
-
-    //================================================================================================
-
-    private void startFragments() {
-        if (ViewManager.getScreenOrientation() == Configuration.ORIENTATION_PORTRAIT)
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container, NoteListFragment.newInstance())
-                    .commit();
-        else
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.container_left, NoteListFragment.newInstance())
-                    .commit();
-    }
 
     //================================================================================================
     // EVENTS
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        ViewManager.setMainActivity(this);
-
-        initToolbar();
-        initDrawer(toolbar);
-
-        startFragments();
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        ViewManager.mainActivity = this
+        initToolbar()
+        initDrawer(toolbar)
+        startFragments()
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        App.getInstance().setStrPref("id", "empty");
+    override fun onBackPressed() {
+        super.onBackPressed()
+        instance!!.setStrPref("id", "empty")
     }
+
+
+    //================================================================================================
+    // START FRAGMENTS
+
+    private fun startFragments() {
+        if (ViewManager.screenOrientation == Configuration.ORIENTATION_PORTRAIT) supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.container, NoteListFragment.newInstance())
+            .commit() else supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.container_left, NoteListFragment.newInstance())
+            .commit()
+    }
+
 
     //================================================================================================
     // MENU EVENTS
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return super.onCreateOptionsMenu(menu);
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.menu_main_noSort:
-                App.getInstance().setIntPref("sort", -1);
-                App.getNoteListItemSource().setSort(-1);
-                break;
-            case R.id.menu_main_sortAsc:
-                App.getInstance().setIntPref("sort", 1);
-                App.getNoteListItemSource().setSort(1);
-                break;
-            case R.id.menu_main_sortDesc:
-                App.getInstance().setIntPref("sort", 2);
-                App.getNoteListItemSource().setSort(2);
-                break;
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_main_noSort -> {
+                instance!!.setIntPref("sort", -1)
+                getNoteListItemSource()!!.setSort(-1)
+            }
+            R.id.menu_main_sortAsc -> {
+                instance!!.setIntPref("sort", 1)
+                getNoteListItemSource()!!.setSort(1)
+            }
+            R.id.menu_main_sortDesc -> {
+                instance!!.setIntPref("sort", 2)
+                getNoteListItemSource()!!.setSort(2)
+            }
         }
-
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item)
     }
+
 
     //================================================================================================
     // TOOLBAR
 
-    private void initToolbar() {
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    private fun initToolbar() {
+        toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
     }
+
 
     //================================================================================================
     // DRAWER
 
-    private void initDrawer(Toolbar toolbar) {
-        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name);
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-        actionBarDrawerToggle.syncState();
-
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.menu_main_noSort:
-                        App.getInstance().setIntPref("sort", -1);
-                        App.getNoteListItemSource().setSort(-1);
-                        break;
-                    case R.id.menu_main_sortAsc:
-                        App.getInstance().setIntPref("sort", 1);
-                        App.getNoteListItemSource().setSort(1);
-                        break;
-                    case R.id.menu_main_sortDesc:
-                        App.getInstance().setIntPref("sort", 2);
-                        App.getNoteListItemSource().setSort(2);
-                        break;
+    private fun initDrawer(toolbar: Toolbar?) {
+        val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+        val actionBarDrawerToggle =
+            ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.app_name, R.string.app_name)
+        drawerLayout.addDrawerListener(actionBarDrawerToggle)
+        actionBarDrawerToggle.syncState()
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        navigationView.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.menu_main_noSort -> {
+                    instance!!.setIntPref("sort", -1)
+                    getNoteListItemSource()!!.setSort(-1)
                 }
-
-                drawerLayout.closeDrawer(GravityCompat.START);
-
-                return false;
+                R.id.menu_main_sortAsc -> {
+                    instance!!.setIntPref("sort", 1)
+                    getNoteListItemSource()!!.setSort(1)
+                }
+                R.id.menu_main_sortDesc -> {
+                    instance!!.setIntPref("sort", 2)
+                    getNoteListItemSource()!!.setSort(2)
+                }
             }
-        });
+            drawerLayout.closeDrawer(GravityCompat.START)
+            false
+        }
     }
-
 }

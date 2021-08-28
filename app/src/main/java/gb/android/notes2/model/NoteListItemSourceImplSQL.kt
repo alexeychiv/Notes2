@@ -1,115 +1,106 @@
-package gb.android.notes2.model;
+package gb.android.notes2.model
 
-import android.content.Context;
+import android.content.Context
+import gb.android.notes2.App.Companion.instance
+import gb.android.notes2.sqlite.DataBase
+import gb.android.notes2.view.ViewManager.publisher
 
-import java.util.List;
+class NoteListItemSourceImplSQL(context: Context?) : NoteListItemSource {
 
-import gb.android.notes2.App;
-import gb.android.notes2.sqlite.DataBase;
-import gb.android.notes2.view.ViewManager;
-
-public class NoteListItemSourceImplSQL implements NoteListItemSource {
-
-    private DataBase db;
-
-    private List<NoteListItem> listNotes;
+    private val db: DataBase
+    var listNotes: MutableList<NoteListItem>? = null
 
     // ===================================================================================================
-    // CONSTRUCTOR
+    // INIT
 
-    public NoteListItemSourceImplSQL(Context context) {
-        db = new DataBase(context);
-        loadList();
+    init {
+        db = DataBase(context)
+        loadList()
     }
+
 
     // ===================================================================================================
     // UTILS
 
-    private void loadList() {
-        listNotes = db.getNotesList();
+    private fun loadList() {
+        listNotes = db.notesList
+        sortList()
+        publisher!!.notifyDataChanged()
+    }
 
-        switch (App.getInstance().getIntPref("sort")) {
-            case -1:
-                listNotes.sort(NoteListItem::compareIdAsc);
-                break;
-            case 1:
-                listNotes.sort(NoteListItem::compareTitleAsc);
-                break;
-            case 2:
-                listNotes.sort(NoteListItem::compareTitleDesc);
-                break;
+    private fun sortList() {
+
+        when (instance!!.getIntPref("sort")) {
+            -1 -> listNotes!!.sortWith(java.util.Comparator { obj: NoteListItem, o: NoteListItem? ->
+                obj.compareIdAsc(
+                    o!!
+                )
+            })
+            1 -> listNotes!!.sortWith(java.util.Comparator { obj: NoteListItem, o: NoteListItem? ->
+                obj.compareTitleAsc(
+                    o!!
+                )
+            })
+            2 -> listNotes!!.sortWith(java.util.Comparator { obj: NoteListItem, o: NoteListItem? ->
+                obj.compareTitleDesc(
+                    o!!
+                )
+            })
         }
-
-        ViewManager.getPublisher().notifyDataChanged();
     }
 
     // ===================================================================================================
     // NoteListItemSource Methods
 
-    @Override
-    public NoteListItemSource init(NoteListSourceResponse noteListSourceResponse) {
-
-        if (noteListSourceResponse != null)
-            noteListSourceResponse.initialized(this);
-
-        return this;
+    override fun init(noteListSourceResponse: NoteListSourceResponse?): NoteListItemSource? {
+        if (noteListSourceResponse != null) noteListSourceResponse.initialized(this)
+        return this
     }
 
-    @Override
-    public void updateData() {
-        loadList();
+    override fun updateData() {
+        loadList()
     }
 
-    @Override
-    public int size() {
-        return listNotes.size();
+    override fun size(): Int {
+        return listNotes!!.size
     }
 
-    @Override
-    public NoteListItem getNoteListItemByPos(int position) {
-        return listNotes.get(position);
+    override fun getNoteListItemByPos(position: Int): NoteListItem {
+        return listNotes!![position]
     }
 
-    @Override
-    public void requestNoteListItemById(String id) {
-        NoteListItem noteListItem = db.getNoteListItem(Integer.parseInt(id));
-        String text = db.getNoteText(Integer.parseInt(id));
-
-        ViewManager.getPublisher().notifyNoteReady(noteListItem, text);
+    override fun requestNoteListItemById(id: String?) {
+        val noteListItem = db.getNoteListItem(id!!.toInt())
+        val text = db.getNoteText(id.toInt())
+        publisher!!.notifyNoteReady(noteListItem, text)
     }
 
-    @Override
-    public void setSort(int sortType) {
-        App.getInstance().setIntPref("sort", sortType);
-        loadList();
+    override fun setSort(sortType: Int) {
+        instance!!.setIntPref("sort", sortType)
+        loadList()
     }
 
-    @Override
-    public void addNote() {
-        db.addNote();
-        loadList();
+    override fun addNote() {
+        db.addNote()
+        loadList()
     }
 
-    @Override
-    public void deleteNote(String id) {
-        db.deleteNote(Integer.parseInt(id));
-        loadList();
+    override fun deleteNote(id: String?) {
+        db.deleteNote(id!!.toInt())
+        loadList()
     }
 
-    @Override
-    public void deleteAll() {
-        db.deleteAll();
-        loadList();
+    override fun deleteAll() {
+        db.deleteAll()
+        loadList()
     }
 
-    @Override
-    public void updateNoteItemById(String id, String title, String date) {
-        db.updateNoteItem(Integer.parseInt(id), title, date);
-        loadList();
+    override fun updateNoteItemById(id: String?, title: String?, date: String?) {
+        db.updateNoteItem(id!!.toInt(), title, date)
+        loadList()
     }
 
-    @Override
-    public void updateNoteTextById(String id, String text) {
-        db.updateNoteText(Integer.parseInt(id), text);
+    override fun updateNoteTextById(id: String?, text: String?) {
+        db.updateNoteText(id!!.toInt(), text)
     }
 }

@@ -1,59 +1,33 @@
-package gb.android.notes2.utils;
+package gb.android.notes2.utils
 
-import java.util.Calendar;
+import gb.android.notes2.utils.NoteDate
+import java.util.*
 
-public class NoteDate {
-
-    public static String dateToString(int day, int month, int year) {
-        String result = String.valueOf(year);
-
-        switch (month) {
-            case 0:
-                result += "-jan-";
-                break;
-            case 1:
-                result += "-feb-";
-                break;
-            case 2:
-                result += "-mar-";
-                break;
-            case 3:
-                result += "-apr-";
-                break;
-            case 4:
-                result += "-may-";
-                break;
-            case 5:
-                result += "-jun-";
-                break;
-            case 6:
-                result += "-jul-";
-                break;
-            case 7:
-                result += "-aug-";
-                break;
-            case 8:
-                result += "-sep-";
-                break;
-            case 9:
-                result += "-oct-";
-                break;
-            case 10:
-                result += "-nov-";
-                break;
-            case 11:
-                result += "-dec-";
-                break;
+object NoteDate {
+    fun dateToString(day: Int, month: Int, year: Int): String {
+        var result = year.toString()
+        when (month) {
+            0 -> result += "-jan-"
+            1 -> result += "-feb-"
+            2 -> result += "-mar-"
+            3 -> result += "-apr-"
+            4 -> result += "-may-"
+            5 -> result += "-jun-"
+            6 -> result += "-jul-"
+            7 -> result += "-aug-"
+            8 -> result += "-sep-"
+            9 -> result += "-oct-"
+            10 -> result += "-nov-"
+            11 -> result += "-dec-"
         }
-
-        result += String.valueOf(day);
-
-        return result;
+        result += day.toString()
+        return result
     }
 
-    public static String getCurrentDateString()
-    {
-        Calendar c = Calendar.getInstance();
-        return dateToString(c.get(Calendar.DAY_OF_MONTH), c.get(Calendar.MONTH), c.get(Calendar.YEAR));
-    }
+    @JvmStatic
+    val currentDateString: String
+        get() {
+            val c = Calendar.getInstance()
+            return dateToString(c[Calendar.DAY_OF_MONTH], c[Calendar.MONTH], c[Calendar.YEAR])
+        }
 }

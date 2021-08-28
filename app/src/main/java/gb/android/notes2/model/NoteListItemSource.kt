@@ -1,25 +1,15 @@
-package gb.android.notes2.model;
+package gb.android.notes2.model
 
-public interface NoteListItemSource {
-    NoteListItemSource init (NoteListSourceResponse noteListSourceResponse);
-
-    void updateData();
-
-    int size();
-
-    NoteListItem getNoteListItemByPos(int position);
-
-    void requestNoteListItemById(String id);
-
-    void setSort(int sortType);
-
-    void addNote();
-
-    void deleteNote(String position);
-
-    void deleteAll();
-
-    void updateNoteItemById(String id, String title, String date);
-
-    void updateNoteTextById(String id, String text);
+interface NoteListItemSource {
+    fun init(noteListSourceResponse: NoteListSourceResponse?): NoteListItemSource?
+    fun updateData()
+    fun size(): Int
+    fun getNoteListItemByPos(position: Int): NoteListItem?
+    fun requestNoteListItemById(id: String?)
+    fun setSort(sortType: Int)
+    fun addNote()
+    fun deleteNote(position: String?)
+    fun deleteAll()
+    fun updateNoteItemById(id: String?, title: String?, date: String?)
+    fun updateNoteTextById(id: String?, text: String?)
 }
